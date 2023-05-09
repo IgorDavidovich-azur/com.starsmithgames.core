@@ -72,7 +72,7 @@ namespace StarSmithGames.Core.Editor.StorageSystem
 
 			GUILayout.FlexibleSpace();
 
-			var saveKeys = GetPrefs();//AssetDatabaseExtensions.LoadAsset<StorageManagerInstaller>().playerPrefsSettings.GetKeyList();
+			var saveKeys = GetPrefs();
 
 			GUI.enabled = saveKeys.Count > 0;
 
