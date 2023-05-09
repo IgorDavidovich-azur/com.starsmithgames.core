@@ -6,11 +6,11 @@
     "unityRelease": "24f1",
     "author" : "StarSmith Games",
     "description" : "Common core with basic functions.",
-    "documentationUrl": "https://example.com/",
-    "changelogUrl": "https://example.com/changelog.html",
+    "documentationUrl": "https://www.notion.so/Documentation-dfba05a261a14828b7198cffa46c93e8",
+    "changelogUrl": "https://www.notion.so/Changelog-4c7b13e6f3754d6fb31417ec32755d5b",
     "licensesUrl": "https://example.com/licensing.html",
     "dependencies" : {
-
+      "com.unity.nuget.newtonsoft-json": "3.1.0"
     },
     "repository": {
 		"type": "git",

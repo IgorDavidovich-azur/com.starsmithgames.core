@@ -1,4 +1,4 @@
-namespace StartSmithGames.Core
+namespace StarSmithGames.Core
 {
 	public static class StringExtensions
 	{
