@@ -61,5 +61,14 @@ namespace StarSmithGames.Core
 			}
 		}
 		private static T instance;
+
+		protected virtual void Start()
+		{
+			if(instance == null)
+			{
+				instance = GameObject.FindObjectOfType<T>();
+				DontDestroyOnLoad(instance);
+			}
+		}
 	}
 }
