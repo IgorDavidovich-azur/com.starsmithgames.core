@@ -1,0 +1,19 @@
+{
+    "name" : "com.starsmithgames.core",
+    "displayName" : "StarSmith Games Core",
+    "version" : "0.0.1",
+    "unity" : "2021.3",
+    "unityRelease": "24f1",
+    "author" : "StarSmith Games",
+    "description" : "Common core with basic functions.",
+    "documentationUrl": "https://example.com/",
+    "changelogUrl": "https://example.com/changelog.html",
+    "licensesUrl": "https://example.com/licensing.html",
+    "dependencies" : {
+
+    },
+    "repository": {
+		"type": "git",
+		"url": "https://github.com/StarSmithGames/com.starsmithgames.core"
+	}
+}
