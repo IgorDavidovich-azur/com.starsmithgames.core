@@ -2,15 +2,7 @@ using System;
 
 namespace StarSmithGames.Core.StorageSystem
 {
-	public interface IStorageData<T>
-	{
-		event Action onChanged;
-
-		T GetData();
-		void SetData(T data);
-	}
-
-	public class StorageData<T> : IStorageData<T>
+	public class StorageData<T>
 	{
 		public event Action onChanged;
 
@@ -49,7 +41,7 @@ namespace StarSmithGames.Core.StorageSystem
 	{
 		public Database Database { get; private set; }
 
-		public IStorageData<bool> IsFirstTime { get; private set; }
+		public StorageData<bool> IsFirstTime { get; private set; }
 
 		/// <summary>
 		/// Default Data
@@ -67,14 +59,14 @@ namespace StarSmithGames.Core.StorageSystem
 		public Storage(string data)
 		{
 			Database = new Database();
-			Database.LoadJson(data);
+			Database.DeserializeJson(data);
 
 			Initialization();
 		}
 
 		public Storage SetData(string data)
 		{
-			Database.LoadJson(data);
+			Database.DeserializeJson(data);
 
 			Initialization();
 
@@ -91,7 +83,7 @@ namespace StarSmithGames.Core.StorageSystem
 		{
 			Purge();
 
-			IsFirstTime = new StorageData<bool>(Database, "is_first_time", true);
+			IsFirstTime = new(Database, "is_first_time", true);
 		}
 
 		/// <summary>

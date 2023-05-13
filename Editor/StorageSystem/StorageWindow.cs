@@ -4,8 +4,6 @@ using StarSmithGames.Core.StorageSystem;
 
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 
 using UnityEditor;
 
@@ -31,52 +29,33 @@ namespace StarSmithGames.Core.Editor.StorageSystem
 		{
 			GUILayout.BeginVertical();
 
-			var files = Directory.GetFiles(Application.persistentDataPath).Where((x) => !x.EndsWith(".log") && !x.EndsWith("log.txt")).ToArray();
-			var directories = Directory.GetDirectories(Application.persistentDataPath);
-
-			GUI.enabled = files.Length != 0 || directories.Length != 0;
-
-			if (GUILayout.Button("Очистить AppData"))
+			GUILayout.BeginHorizontal();
+			GUI.enabled = !DataCleaner.IsAppDataClean;
+			if (GUILayout.Button("Clear AppData"))
 			{
-				foreach (var directory in directories)
-				{
-					new DirectoryInfo(directory).Delete(true);
-				}
-
-				foreach (string filePath in files)
-				{
-					File.Delete(filePath);
-				}
-
-				EditorGUI.FocusTextInControl(null);
-			}
-
-			if (GUILayout.Button("Очистить PersistentDataPath"))
-			{
-				JsonSerializator.ClearPersistentPath();
+				DataCleaner.ClearAppData();
 
 				EditorGUI.FocusTextInControl(null);
 			}
 
 			GUI.enabled = true;
-
-			if (GUILayout.Button("Очистить PlayerPrefs"))
+			if (GUILayout.Button("Open AppData"))
 			{
-				PlayerPrefs.DeleteAll();
-				PlayerPrefs.Save();
+				var itemPath = Application.persistentDataPath;
+				itemPath = itemPath.Replace(@"/", @"\");
+				System.Diagnostics.Process.Start("explorer.exe", "/select," + itemPath);
+			}
+			GUILayout.EndHorizontal();
+
+			GUILayout.BeginHorizontal();
+			var saveKeys = GetPrefs();
+			GUI.enabled = saveKeys.Count > 0;
+			if (GUILayout.Button("Clear PlayerPrefs"))
+			{
+				DataCleaner.ClearPlayerPrefs();
 
 				EditorGUI.FocusTextInControl(null);
 			}
-
-			GUILayout.EndVertical();
-
-			GUILayout.FlexibleSpace();
-
-			var saveKeys = GetPrefs();
-
-			GUI.enabled = saveKeys.Count > 0;
-
-			GUILayout.Label("regedit");
 
 			if (GUILayout.Button("Open PlayerPrefs"))
 			{
@@ -84,6 +63,12 @@ namespace StarSmithGames.Core.Editor.StorageSystem
 				jsonWindow.minSize = new Vector2(400, 700);
 				jsonWindow.texts = saveKeys;
 			}
+			GUILayout.EndHorizontal();
+
+			GUILayout.EndVertical();
+
+			GUILayout.FlexibleSpace();
+			GUILayout.Label("regedit");
 		}
 
 

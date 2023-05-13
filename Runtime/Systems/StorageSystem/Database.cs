@@ -1,3 +1,5 @@
+using Newtonsoft.Json.Linq;
+
 using System;
 using System.Collections.Generic;
 
@@ -7,7 +9,49 @@ namespace StarSmithGames.Core.StorageSystem
 {
 	public class Database : MonoBehaviour
 	{
-		private Dictionary<string, object> Data = new Dictionary<string, object>();
+		public Dictionary<string, object> Data { get; private set; } = new();
+
+		public T Get<T>(string key, T defaultValue = default)
+		{
+			if (Data.ContainsKey(key))
+			{
+				object data = Data[key];
+
+				//fix Error "Object must implement IConvertible"
+				if (data is JObject jdata) // >:c
+				{
+					data = jdata.ToObject<T>();
+					Data[key] = data;
+				}
+
+				try
+				{
+					return (T)data;
+				}
+				catch (InvalidCastException e)
+				{
+					Debug.LogWarning($"[StorageSystem>Database] {key} default:{defaultValue} {e.Message}");
+
+					try
+					{
+						return (T)Convert.ChangeType(data, typeof(T));
+					}
+					catch (Exception e2)
+					{
+						Debug.LogError($"[StorageSystem>Database] {key} default:{defaultValue} {e2.Message}");
+
+						return defaultValue;
+					}
+				}
+			}
+
+			return defaultValue;
+		}
+
+		public void Set<T>(string key, T value)
+		{
+			Data[key] = value;
+		}
 
 		public bool IsHas(string key)
 		{
@@ -22,42 +66,14 @@ namespace StarSmithGames.Core.StorageSystem
 			}
 		}
 
-		public T Get<T>(string key, T defaultValue = default)
-		{
-			if (Data.ContainsKey(key))
-			{
-				object data = Data[key];
-
-				if (data is T)
-				{
-					return (T)data;
-				}
-				try
-				{
-					return (T)Convert.ChangeType(data, typeof(T));
-				}
-				catch (InvalidCastException)
-				{
-					return default(T);
-				}
-			}
-			return defaultValue;
-		}
-
-		public void Set<T>(string key, T value)
-		{
-			Data[key] = value;
-		}
-
-		public Dictionary<string, object> GetDictionary() => Data;
-
-		public string GetJson()
+		public string GetSerializedJson()
 		{
 			return JsonSerializator.SerializeObjectToJson(Data);
 		}
-		public void LoadJson(string json)
+
+		public void DeserializeJson(string json)
 		{
-			Data = JsonSerializator.DeserializeObjectFromJson(json);
+			Data = JsonSerializator.DeserializeObjectJson(json);
 		}
 
 		public void Drop()

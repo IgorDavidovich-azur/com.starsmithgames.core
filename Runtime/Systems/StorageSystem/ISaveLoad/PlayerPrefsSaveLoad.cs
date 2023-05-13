@@ -1,20 +1,7 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace StarSmithGames.Core.StorageSystem
 {
-	public interface ISaveLoad<S> where S : Storage
-    {
-		void Save();
-
-		void Load();
-
-		/// <summary>
-		/// Get currently selected storage 
-		/// </summary>
-		/// <returns>Current active storage.</returns>
-		S GetStorage();
-	}
-
 	public class PlayerPrefsSaveLoad<S> : ISaveLoad<S> where S : Storage, new()
 	{
 		private S activeStorage;
@@ -33,10 +20,10 @@ namespace StarSmithGames.Core.StorageSystem
 
 		public void Save()
 		{
-			PlayerPrefs.SetString(dataName, activeStorage.Database.GetJson());
+			PlayerPrefs.SetString(dataName, activeStorage.Database.GetSerializedJson());
 			PlayerPrefs.Save();
 
-			Debug.Log($"[PlayerPrefsSaveLoad] Save storage to pref");
+			Debug.Log($"[StorageSystem>PlayerPrefsSaveLoad] Save storage to pref");
 		}
 
 		public void Load()
@@ -52,10 +39,10 @@ namespace StarSmithGames.Core.StorageSystem
 			{
 				activeStorage = new S();
 
-				Debug.Log($"[PlayerPrefsSaveLoad] Create new save");
+				Debug.Log($"[StorageSystem>PlayerPrefsSaveLoad] Create new save");
 			}
 
-			Debug.Log($"[PlayerPrefsSaveLoad] Load storage from pref: {dataName}");
+			Debug.Log($"[StorageSystem>PlayerPrefsSaveLoad] Load storage from pref: {dataName}");
 		}
 
 		public S GetStorage()
