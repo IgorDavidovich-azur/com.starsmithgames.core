@@ -89,7 +89,8 @@ namespace StarSmithGames.Core.Editor.StorageSystem
 							var key = keys[i].Split("_h")[0];
 							if (PlayerPrefs.HasKey(key))
 							{
-								prefs.Add(key, PlayerPrefs.GetString(key));
+								var isString = !PlayerPrefs.GetString(key).IsEmpty();
+								prefs.Add(key, isString ? PlayerPrefs.GetString(key) : registry.GetValue(keys[i]).ToString());
 							}
 						}
 					}
